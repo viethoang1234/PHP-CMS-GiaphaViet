@@ -1,0 +1,179 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Album {
+  id   Int    @id @default(autoincrement()) @map("ID")
+  name String @map("NAME") @db.VarChar(255)
+  info String @map("INFO") @db.Text
+  date String @map("DATE") @db.VarChar(255)
+
+  @@map("ALBUM")
+}
+
+model Catalog {
+  fid  Int    @id @default(autoincrement()) @map("FID")
+  name String @map("NAME") @db.VarChar(50)
+  info String @map("INFO") @db.Text
+
+  titles Title[]
+
+  @@map("CATALOG")
+}
+
+model Contact {
+  id      Int    @id @default(autoincrement()) @map("ID")
+  content String @map("CONTENT") @db.Text
+
+  @@map("CONTACT")
+}
+
+model Donate {
+  id      Int    @id @default(autoincrement()) @map("ID")
+  name    String @map("NAME") @db.Text
+  address String @map("ADDRESS") @db.Text
+  phone   String @map("PHONE") @db.Text
+  value   Int    @map("VALUE")
+
+  @@map("DONATE")
+}
+
+model Group {
+  gid  Int    @id @default(autoincrement()) @map("GID")
+  name String @map("NAME") @db.VarChar(50)
+  info String @map("INFO") @db.Text
+
+  users User[]
+
+  @@map("GROUP")
+}
+
+model InfoPerson {
+  id           Int      @id @default(autoincrement()) @map("ID")
+  fatherId     Int      @map("FATHER_ID")
+  generation   Int      @map("GENERATION")
+  name         String   @map("NAME") @db.Text
+  birthday     DateTime @map("BIRTHDAY") @db.Date
+  address      String   @map("ADDRESS") @db.Text
+  phone        String   @map("PHONE") @db.Text
+  mail         String   @map("MAIL") @db.Text
+  die          Boolean  @map("DIE") @db.TinyInt
+  sex          Boolean  @map("SEX") @db.TinyInt
+  marBirth     DateTime @map("MAR_BIRTH") @db.Date
+  marYearOld   Int      @map("MAR_YEAR_OLD")
+  marDateDie   DateTime @map("MAR_DATE_DIE") @db.Date
+  marPlanDie   String   @map("MAR_PLAN_DIE") @db.Text
+  marAbout     String   @map("MAR_ABOUT") @db.Text
+  normalName   String   @map("NORMAL_NAME") @db.Text
+  exName       String   @map("EX_NAME") @db.Text
+  numChild     Int      @map("NUM_CHILD")
+  nickName     String   @map("NICK_NAME") @db.Text
+  yearOld      Int      @map("YEAR_OLD")
+  dateDie      DateTime @map("DATE_DIE") @db.Date
+  planDie      String   @map("PLAN_DIE") @db.Text
+  about        String   @map("ABOUT") @db.Text
+  marName      String   @map("MAR_NAME") @db.Text
+  image        String   @map("IMAGE") @db.Text
+  marDie       Boolean  @map("MAR_DIE") @db.TinyInt
+
+  @@map("INFO_PERSON")
+}
+
+model Link {
+  id   Int    @id @default(autoincrement()) @map("ID")
+  name String @map("NAME") @db.Text
+  url  String @map("URL") @db.Text
+  img  String @map("IMG") @db.Text
+  info String @map("INFO") @db.Text
+
+  @@map("LINK")
+}
+
+model Media {
+  id        Int    @id @default(autoincrement()) @map("ID")
+  albumId   Int    @map("ALBUM_ID")
+  url       String @map("URL") @db.Text
+  name      String @map("NAME") @db.Text
+  info      String @map("INFO") @db.Text
+  extension String @map("EXTENSION") @db.VarChar(10)
+
+  @@map("MEDIA")
+}
+
+model MediaGroup {
+  id   Int    @id @default(autoincrement()) @map("ID")
+  name String @map("NAME") @db.Text
+  info String @map("INFO") @db.Text
+
+  @@map("MEDIA_GROUP")
+}
+
+model Messages {
+  id      Int      @id @default(autoincrement()) @map("ID")
+  name    String   @map("NAME") @db.Text
+  email   String   @map("EMAIL") @db.Text
+  phone   String   @map("PHONE") @db.Text
+  address String   @map("ADDRESS") @db.Text
+  content String   @map("CONTENT") @db.Text
+  date    DateTime @map("DATE") @db.DateTime
+
+  @@map("MESSAGES")
+}
+
+model Page {
+  id       Int    @id @default(autoincrement()) @map("ID")
+  pageName String @map("PAGE_NAME") @db.Text
+  content  String @map("CONTENT") @db.Text
+
+  @@map("PAGE")
+}
+
+model SiteInfo {
+  id   Int    @id @default(autoincrement()) @map("ID")
+  name String @map("NAME") @db.Text
+  info String @map("INFO") @db.Text
+
+  @@map("SITE_INFO")
+}
+
+model Slide {
+  id   Int    @id @default(autoincrement()) @map("ID")
+  url  String @map("URL") @db.Text
+  info String @map("INFO") @db.Text
+
+  @@map("SLIDE")
+}
+
+model Title {
+  tid         Int      @id @default(autoincrement()) @map("TID")
+  fid         Int      @map("FID")
+  title       String   @map("TITLE") @db.Text
+  content     String   @map("CONTENT") @db.Text
+  dateCreate  DateTime @map("DATE_CREATE") @db.DateTime
+  author      String   @map("AUTHOR") @db.Text
+  description String   @map("DESCRIPTION") @db.Text
+
+  catalog Catalog @relation(fields: [fid], references: [fid])
+
+  @@map("TITLE")
+}
+
+model User {
+  uid  Int    @id @default(autoincrement()) @map("UID")
+  gid  Int    @map("GID")
+  name String @map("NAME") @db.Text
+  pass String @map("PASS") @db.Text
+  info String @map("INFO") @db.Text
+
+  group Group @relation(fields: [gid], references: [gid])
+
+  @@map("USER")
+}
